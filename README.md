@@ -18,3 +18,33 @@ of parameters.
 - The program shall implement an architecture of a simple CLI layer calling internal API functions. This to ease the
 testing using callable functions and to make all API functions usable from within the code (something not always)
   possible with CLI functions)
+  
+## Usage
+A directory with the contents to be packaged, and a file containing meta-data is used as input to create a package. The
+contents can be any kind of files, and the sub-directory structure will be preserved inside a compressed archive. Inside
+the compressed archive there will be a manifest file containing the meta-data, additional information such as
+time-stamps, and file hashes of all contained files.
+
+Additional functionality to test such a delivery package against the manifest-file will be available.
+
+Example structure
+```
+├── Docs
+│ ├── release_documentation
+│ │   ├── doc1.txt
+│ │   ├── doc2.txt
+│ │   └── doc3.txt
+│ └── generated_docs
+│     ├── doc1.json
+│     ├── doc2.pfd
+│     ├── doc3.txt
+│     └── doc4.md
+├── Misc
+│ └── happy_ascii_art.txt
+│ 
+└── Binaries
+    └── build_DateTimeVersion
+        ├── boot_loader.bin
+        ├── SPL.bin
+        └── imgage.bin
+```
