@@ -59,7 +59,7 @@ class ManifestFile:
         :return:
         """
         try:
-            self.contents.add(path_to_file)
+            self.contents.add_artifact_to_db(path_to_file)
         except ArtifactE as expression:
             raise ManifestE(expression.msg)
 
