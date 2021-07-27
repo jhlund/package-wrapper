@@ -17,9 +17,12 @@ class Archive:
     def _validate(file_path: Path):
         if not file_path.exists():
             raise ArchiveE("file: %s not found" % file_path)
-        if file_path.name.endswith("tar.gz") or file_path.name.endswith("tar") or file_path.name.endswith("zip"):
+        if file_path.name.endswith("tar.gz") or file_path.name.endswith("tar"):
             if not tarfile.is_tarfile(file_path):
-                raise ArchiveE("file %s is not a zip or TAR ball" % file_path)
+                raise ArchiveE("file %s is not a TAR ball" % file_path)
+        elif file_path.name.endswith("zip"):
+            if not zipfile.is_zipfile(file_path):
+                raise ArchiveE("file %s is not a zip file" % file_path)
 
     def extract(self, out_dir: Path):
         Archive._validate(self.archive)
@@ -42,7 +45,7 @@ class Archive:
 
         files = [_file for _file in dir_path.glob("**/*") if dir_path.joinpath(_file).is_file()]
 
-        # handle TAR, TGZ and ZIP
+        # handles TAR, TGZ and ZIP
         if self.archive.name.endswith("tar.gz"):
             with tarfile.open(self.archive, "w:gz") as tar_ref:
                 for file in files:
