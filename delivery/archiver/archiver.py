@@ -36,9 +36,12 @@ class Archive:
         else:
             raise ArchiveE("unsupported file format")
 
-    def compress(self, dir_path: Path, force_relative=True):
+    def compress(self, dir_path: Path):
         if not dir_path.is_dir():
             raise ArchiveE("path: %s is not a directory" % dir_path)
+        
+        #TODO: clear this mess up to return the full path for each file.
+        files = [_file for _file in dir_path.glob("**/*") if dir_path.joinpath(_file).is_file()]
 
         # handle TAR, TGZ and ZIP
         if self.archive.name.endswith("tar.gz"):
@@ -53,12 +56,8 @@ class Archive:
                     mode="w",
                     compression=zipfile.ZIP_DEFLATED
             ) as zip_ref:
-                files = [_file for _file in dir_path.glob("**/*") if dir_path.joinpath(_file).is_file()]
                 for file in files:
-                    _abs = file.absolute()
-                    if force_relative:
-                        _rel = _abs.relative_to(dir_path)
-                        zip_ref.write(_abs, _rel)
-                    else:
-                        zip_ref.write(_abs)
+                    _abs_path = file.absolute()
+                    _rel_path = _abs_path.relative_to(dir_path)
+                    zip_ref.write(_abs_path, arcname=_rel_path)
                 zip_ref.close()
