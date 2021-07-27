@@ -39,17 +39,22 @@ class Archive:
     def compress(self, dir_path: Path):
         if not dir_path.is_dir():
             raise ArchiveE("path: %s is not a directory" % dir_path)
-        
-        #TODO: clear this mess up to return the full path for each file.
+
         files = [_file for _file in dir_path.glob("**/*") if dir_path.joinpath(_file).is_file()]
 
         # handle TAR, TGZ and ZIP
         if self.archive.name.endswith("tar.gz"):
             with tarfile.open(self.archive, "w:gz") as tar_ref:
-                tar_ref.add(dir_path, recursive=True)
+                for file in files:
+                    _abs_path = file.absolute()
+                    _rel_path = _abs_path.relative_to(dir_path)
+                    tar_ref.add(_abs_path, arcname=_rel_path, recursive=True)
         elif self.archive.name.endswith("tar"):
             with tarfile.open(self.archive, "w") as tar_ref:
-                tar_ref.add(dir_path, recursive=True)
+                for file in files:
+                    _abs_path = file.absolute()
+                    _rel_path = _abs_path.relative_to(dir_path)
+                    tar_ref.add(_abs_path, arcname=_rel_path, recursive=True)
         elif self.archive.name.endswith("zip"):
             with zipfile.ZipFile(
                     self.archive,
