@@ -4,7 +4,7 @@ import os
 from pathlib import Path
 from typing import List
 
-from delivery.archiver.archiver import Archive
+from delivery.archiver.archiver import Archive, ArchiveE
 
 @pytest.fixture()
 def generate_files(tmpdir):
@@ -26,3 +26,10 @@ class Test_archive:
         archive = Archive(file_name=archive_path)
         dir_path = generate_files
         archive.compress(dir_path=dir_path)
+
+    def test_add_folder_raises_no_dir(self, generate_files, tmpdir):
+        archive_path = Path(tmpdir).joinpath(Path("example.zip"))
+        faulty_dir_path = Path(tmpdir).joinpath(Path("not_an_existing_directory"))
+        archive = Archive(file_name=archive_path)
+        with pytest.raises(ArchiveE):
+            archive.compress(dir_path=faulty_dir_path)
