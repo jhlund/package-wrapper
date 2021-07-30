@@ -3,13 +3,13 @@ from delivery.manifest.filehash import file_hash_create, file_hash_check, FileHa
 
 
 class ArtifactE(BaseException):
-    def __init__(self, msg):
+    def __init__(self, msg: str):
         super(ArtifactE, self).__init__()
         self.msg = msg
 
 
 class ArtifactDB:
-    def __init__(self, hash_method="sha256"):
+    def __init__(self, hash_method: str="sha256"):
         self.database = {}
         self.hash_method = hash_method
 
@@ -25,7 +25,7 @@ class ArtifactDB:
 
         self.database[path_to_file] = {"file hash": _hash}
 
-    def check_hashes_in_db(self):
+    def check_hashes_in_db(self) -> bool:
         _match = True
         for _file in self.database:
             (_hash_method, _hash_string) = self.database[_file]["file hash"].split(":")

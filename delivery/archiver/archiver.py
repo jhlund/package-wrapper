@@ -4,7 +4,7 @@ from pathlib import Path
 
 
 class ArchiveE(Exception):
-    def __init__(self, msg):
+    def __init__(self, msg: str):
         super(ArchiveE, self).__init__()
         self.msg = msg
 

@@ -16,7 +16,7 @@ HASH_ALGORITHMS = [
 
 
 class FileHashE(BaseException):
-    def __init__(self, msg):
+    def __init__(self, msg: str):
         super(FileHashE, self).__init__()
         self.msg = msg
 
