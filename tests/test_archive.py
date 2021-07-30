@@ -26,6 +26,7 @@ class Test_archive:
         archive = Archive(file_name=archive_path)
         dir_path = generate_files
         archive.compress(dir_path=dir_path)
+        assert archive_path.exists()
 
     def test_add_folder_raises_no_dir(self, generate_files, tmpdir):
         archive_path = Path(tmpdir).joinpath(Path("example.zip"))
