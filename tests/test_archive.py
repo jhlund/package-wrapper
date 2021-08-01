@@ -21,7 +21,13 @@ def generate_files(tmpdir):
 
 
 class Test_archive:
-    def test_add_folder(self, generate_files, tmpdir):
+    @pytest.mark.parametrize("archive_path",
+        [
+            pytest.param(Path("test.zip"), id="zip"),
+            pytest.param(Path("test.tar"), id="tar"),
+            pytest.param(Path("test.tar.gz"), id="tar.gz")
+        ])
+    def test_add_folder(self, generate_files, tmpdir, archive_path):
         archive_path = Path(tmpdir).joinpath(Path("test.zip"))
         archive = Archive(file_name=archive_path)
         dir_path = generate_files
