@@ -68,4 +68,3 @@ class Archive:
                     _abs_path = file.absolute()
                     _rel_path = _abs_path.relative_to(dir_path)
                     zip_ref.write(_abs_path, arcname=_rel_path)
-                zip_ref.close()
