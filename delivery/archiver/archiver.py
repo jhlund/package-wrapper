@@ -43,7 +43,11 @@ class Archive:
         if not dir_path.is_dir():
             raise ArchiveE("path: %s is not a directory" % dir_path)
 
-        files = [_file for _file in dir_path.glob("**/*") if dir_path.joinpath(_file).is_file()]
+        files = [
+            _file
+            for _file in dir_path.glob("**/*")
+            if dir_path.joinpath(_file).is_file()
+        ]
 
         # handles TAR, TGZ and ZIP
         if self.archive.name.endswith("tar.gz"):
@@ -60,9 +64,7 @@ class Archive:
                     tar_ref.add(_abs_path, arcname=_rel_path, recursive=True)
         elif self.archive.name.endswith("zip"):
             with zipfile.ZipFile(
-                    self.archive,
-                    mode="w",
-                    compression=zipfile.ZIP_DEFLATED
+                self.archive, mode="w", compression=zipfile.ZIP_DEFLATED
             ) as zip_ref:
                 for file in files:
                     _abs_path = file.absolute()

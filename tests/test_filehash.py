@@ -18,19 +18,28 @@ def hash_file(tmpdir):
 @pytest.mark.parametrize(
     "expected_hash, hash_method",
     [
-        pytest.param("sha1:c922c69a3ad8c693b7dcc1e4bf75dbffc6074782", "sha1", id="sha1"),
-        pytest.param("sha224:749c15eaca51f74b47824be96cc5e7aceca8339cb73e258885d11f2c", "sha224", id="sha224"),
+        pytest.param(
+            "sha1:c922c69a3ad8c693b7dcc1e4bf75dbffc6074782", "sha1", id="sha1"
+        ),
+        pytest.param(
+            "sha224:749c15eaca51f74b47824be96cc5e7aceca8339cb73e258885d11f2c",
+            "sha224",
+            id="sha224",
+        ),
         pytest.param(
             "sha256:4c12882f1ce34f1f0aa5d2f6a902170d35cef128b8eecee5867d5750f5ab5e63",
-            "sha256", id="sha256"
+            "sha256",
+            id="sha256",
         ),
         pytest.param(
             "sha384:26acf5c876e3c7dd19d276b88431d5cdb86f5f757e8a27e420e2f3f43b8f5026bdd3298f1258bf8d5b4c98af243bbddc",
-            "sha384", id="sha384"
+            "sha384",
+            id="sha384",
         ),
         pytest.param(
             "sha512:fe493c17f9521b641eaac36edfbab48657938f2337da75bcf5b4e32ec9d3cb4ecaf524031553aff7b17a0ca3da58d3f92e8e404a93eb24fcc93698fa40f631de",
-            "sha512", id="sha512"
+            "sha512",
+            id="sha512",
         ),
         pytest.param("md5:545112744d394dd2b7e52b4f4dc717ed", "md5", id="md5"),
     ],
