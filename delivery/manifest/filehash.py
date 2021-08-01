@@ -94,7 +94,7 @@ def file_hash_create_hash_file(
     _hash_list = []
 
     for item in file_list:
-        _hash = file_hash_create(item)
+        _hash = file_hash_create(file_name=item, hash_method=hash_method)
         _path = Path(item).relative_to(file_path.parent)
         _hash_list.append(hash_method + ":" + _hash + " " + str(_path))
 

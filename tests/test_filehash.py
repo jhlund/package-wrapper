@@ -2,7 +2,7 @@ import pytest
 from pathlib import Path
 import json
 
-from delivery.manifest.filehash import file_hash_check
+from delivery.manifest.filehash import file_hash_check, file_hash_create_hash_file
 
 
 @pytest.fixture()
@@ -10,8 +10,8 @@ def hash_file(tmpdir):
     _file_name = Path("hashed_file.json")
     _json_data = {"my_hash": "is always matching"}
     _path = Path(tmpdir).joinpath(_file_name)
-    with open(_path, "w") as fp:
-        json.dump(_json_data, fp, indent=3)
+    with open(_path, "w") as file_pointer:
+        json.dump(_json_data, file_pointer, indent=3)
     yield _path
 
 
@@ -63,3 +63,9 @@ class TestHashes:
         assert not file_hash_check(
             file_name=hash_file, hash_string=_invalid, hash_method=hash_method
         )
+
+    def test_hash_file_contents(self, tmpdir, hash_file, expected_hash, hash_method):
+        file_path = Path(tmpdir).joinpath(Path("hash_file.json"))
+        file_hash_create_hash_file(file_path=file_path, file_list=[hash_file], hash_method=hash_method)
+        contents = file_path.read_text()
+        assert contents == f"{expected_hash} hashed_file.json"
