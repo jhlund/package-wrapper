@@ -23,9 +23,10 @@ class ManifestFile:
     def __init__(self, hash_method="sha256"):
         self.contents = ArtifactDB(hash_method=hash_method)
         self._meta = dict()
-        self._meta["created"] = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-        self.logger = logging.getLogger(self.__class__.__name__)
-        self.logger.debug("Manifest instantiated, hash:")
+        self._meta["created (utc)"] = datetime.utcnow().strftime("%d/%m/%Y %H:%M:%S")
+
+    def add_meta_data(self, keyword: str, content):
+        self._meta[keyword] = content
 
     def add_folder(self, path_to_directory: Path):
         """
