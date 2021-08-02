@@ -24,7 +24,7 @@ def folder_structure(tmpdir):
 class TestManifest:
     def test_created_time_format(self):
         manifest = ManifestFile(hash_method="sha256")
-        assert re.match(TIME_FORMAT, manifest._meta["created"])
+        assert re.match(TIME_FORMAT, manifest._meta["created (utc)"])
 
     def test_add_folder(self, folder_structure):
         manifest = ManifestFile(hash_method="sha256")
