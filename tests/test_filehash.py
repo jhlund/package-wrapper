@@ -66,6 +66,8 @@ class TestHashes:
 
     def test_hash_file_contents(self, tmpdir, hash_file, expected_hash, hash_method):
         file_path = Path(tmpdir).joinpath(Path("hash_file.json"))
-        file_hash_create_hash_file(file_path=file_path, file_list=[hash_file], hash_method=hash_method)
-        contents = file_path.read_text()
-        assert contents == f"{expected_hash} hashed_file.json"
+        file_hash_create_hash_file(
+            file_path=file_path, file_list=[hash_file], hash_method=hash_method
+        )
+        file_contents = file_path.read_text()
+        assert file_contents == f"{expected_hash} hashed_file.json"

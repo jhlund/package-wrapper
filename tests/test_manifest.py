@@ -39,4 +39,4 @@ class TestManifest:
     def test_add_file(self, folder_structure):
         manifest = ManifestFile(hash_method="sha256")
         dir_path, file_path = folder_structure
-        assert manifest.add_artifact(file_path)
+        assert manifest.add_artifact(file_path, dir_path)

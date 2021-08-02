@@ -1,6 +1,6 @@
 from datetime import datetime
 from pathlib import Path
-import logging
+
 from delivery.manifest.artifactdb import ArtifactE, ArtifactDB
 from delivery.manifest.filehash import file_hash_create_hash_file
 
@@ -46,21 +46,26 @@ class ManifestFile:
         try:
             for file in files:
                 _abs_path = file.absolute()
-                self.add_artifact(_abs_path)
+                self.add_artifact(_abs_path, path_to_directory)
         except ArtifactE as expression:
             raise ManifestE(expression.msg)
 
         return True
 
-    def add_artifact(self, path_to_file: Path):
+    def add_artifact(self, path_to_file: Path, path_to_directory: Path):
         """
-        Adds as an artifact based in it's relative path to the manifest DB
+        Adds as an artifact to the manifest DB
         :param path_to_file:
         :return:
         """
         try:
-            self.contents.add_artifact_to_db(path_to_file)
+            self.contents.add_artifact_to_db(path_to_file, path_to_directory)
         except ArtifactE as expression:
             raise ManifestE(expression.msg)
 
         return True
+
+    def retrive_contents(self):
+        contents = self._meta
+        contents["contents"] = self.contents.database
+        return contents

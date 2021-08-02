@@ -13,7 +13,7 @@ class ArtifactDB:
         self.database = {}
         self.hash_method = hash_method
 
-    def add_artifact_to_db(self, path_to_file: Path):
+    def add_artifact_to_db(self, path_to_file: Path, base_path: Path):
         _hash = None
         if path_to_file in self.database.keys():
             raise ArtifactE(f"duplicated file: {path_to_file}")
@@ -27,12 +27,13 @@ class ArtifactDB:
         except FileHashE as exception:
             raise ArtifactE(exception.msg)
 
-        self.database[path_to_file] = {"file hash": _hash}
+        rel_file_path = Path.relative_to(path_to_file, base_path)
+        self.database[str(rel_file_path)] = _hash
 
     def check_hashes_in_db(self) -> bool:
         _match = True
         for _file in self.database:
-            (_hash_method, _hash_string) = self.database[_file]["file hash"].split(":")
+            (_hash_method, _hash_string) = self.database[_file].split(":")
             try:
                 _match = file_hash_check(
                     file_name=Path(_file),
