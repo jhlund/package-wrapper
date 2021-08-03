@@ -57,7 +57,7 @@ def package(directory, meta_data, output, hash_type):
     print(f"directory: {directory}")
     print(f"meta_data: {meta_data}")
     print(f"hash_type: {hash_type}")
-    # Create the comeplete meta-data file
+    # Create the complete meta-data file
     manifest = ManifestFile(hash_method=hash_type)
 
     manifest.add_meta_data("version of package program", __version__)
@@ -65,10 +65,13 @@ def package(directory, meta_data, output, hash_type):
     manifest.add_meta_data("Output folder", str(output))
     manifest.add_meta_data_file(meta_data_path=meta_data)
 
+    # All folder to the manifest
     manifest.add_folder(path_to_directory=directory)
     output_manifest_path = directory.joinpath(Path("manifest.json"))
     with open(output_manifest_path, "w") as file_pointer:
         file_pointer.write(json.dumps(manifest.retrive_contents(), indent=3))
+    
+    # Create the compressed output file
     archive = Archive(output.joinpath("output.zip"))
     archive.compress(dir_path=directory)
 
