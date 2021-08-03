@@ -1,3 +1,6 @@
 {
-    "placeholder": "this is an example meta-data file without contents."
+    "placeholder str": "this is an example meta-data file without contents.",
+    "placeholder int": 123,
+    "placeholder list": ["list", "of", "strings"],
+    "placeholder dict": {"dict": 1, "of": 2.0, "misc": "3"}
 }
