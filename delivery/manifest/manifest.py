@@ -2,7 +2,7 @@ from datetime import datetime
 from pathlib import Path
 import json
 
-from delivery.manifest.artifactdb import ArtifactE, ArtifactDB
+from delivery.manifest.filehash import file_hash_create, file_hash_check, FileHashE
 from delivery.manifest.filehash import file_hash_create_hash_file
 
 
@@ -22,12 +22,13 @@ class ManifestFile:
     """
 
     def __init__(self, hash_method="sha256"):
-        self.contents = ArtifactDB(hash_method=hash_method)
-        self._meta = dict()
-        self._meta["created (utc)"] = datetime.utcnow().strftime("%d/%m/%Y %H:%M:%S")
+        #self.contents = ArtifactDB(hash_method=hash_method)
+        self.database = dict()
+        self.database["created (utc)"] = datetime.utcnow().strftime("%d/%m/%Y %H:%M:%S")
+        self.hash_method = hash_method
 
     def add_meta_data(self, keyword: str, content):
-        self._meta[keyword] = content
+        self.database[keyword] = content
 
     def add_meta_data_file(self, meta_data_path: Path):
         data = json.loads(meta_data_path.read_bytes())
@@ -41,6 +42,7 @@ class ManifestFile:
         :param path_to_directory:
         :return: True if succeeded, otherwise False
         """
+
         if not path_to_directory.is_dir():
             raise ManifestE("No such directory")
 
@@ -50,29 +52,51 @@ class ManifestFile:
             if path_to_directory.joinpath(_file).is_file()
         ]
 
-        try:
-            for file in files:
-                _abs_path = file.absolute()
-                self.add_artifact(_abs_path, path_to_directory)
-        except ArtifactE as expression:
-            raise ManifestE(expression.msg)
+        for file in files:
+            _abs_path = file.absolute()
+            self.add_artifact_to_db(_abs_path, path_to_directory)
 
         return True
 
-    def add_artifact(self, path_to_file: Path, path_to_directory: Path):
-        """
-        Adds as an artifact to the manifest DB
-        :param path_to_file:
-        :return:
-        """
+    def add_artifact_to_db(self, path_to_file: Path, base_path: Path):
+        if "files" not in self.database.keys():
+            self.database["files"] = dict()   
+
+        _hash = None
+        if path_to_file in self.database.keys():
+            raise ManifestE("duplicated file: {path_to_file}")
+
         try:
-            self.contents.add_artifact_to_db(path_to_file, path_to_directory)
-        except ArtifactE as expression:
-            raise ManifestE(expression.msg)
+            _hash = (
+                self.hash_method
+                + ":"
+                + file_hash_create(file_name=path_to_file, hash_method=self.hash_method)
+            )
+        except FileHashE as exception:
+            raise ManifestE(exception.msg)
+
+        rel_file_path = Path.relative_to(path_to_file, base_path)
+        self.database["files"][str(rel_file_path)] = _hash
 
         return True
 
     def retrive_contents(self):
-        contents = self._meta
-        contents["contents"] = self.contents.database
-        return contents
+        return self.database
+
+    def check_hashes_in_db(self) -> bool:
+        _match = True
+        for _file in self.database["files"]:
+            (_hash_method, _hash_string) = self.database[_file].split(":")
+            try:
+                _match = file_hash_check(
+                    file_name=Path(_file),
+                    hash_string=_hash_string,
+                    hash_method=_hash_method,
+                )
+            except FileHashE:
+                raise ManifestE(f"error when checking hash for {_file}")
+
+            if not _match:
+                break
+
+        return _match

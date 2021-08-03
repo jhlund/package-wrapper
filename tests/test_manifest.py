@@ -38,7 +38,7 @@ def meta_file(tmpdir):
 class TestManifest:
     def test_created_time_format(self):
         manifest = ManifestFile(hash_method="sha256")
-        assert re.match(TIME_FORMAT, manifest._meta["created (utc)"])
+        assert re.match(TIME_FORMAT, manifest.database["created (utc)"])
 
     def test_add_folder(self, folder_structure):
         manifest = ManifestFile(hash_method="sha256")
@@ -53,7 +53,15 @@ class TestManifest:
     def test_add_file(self, folder_structure):
         manifest = ManifestFile(hash_method="sha256")
         dir_path, file_path = folder_structure
-        assert manifest.add_artifact(file_path, dir_path)
+        assert manifest.add_artifact_to_db(file_path, dir_path)
+
+    def test_create_files_key_when_adding_artifact(self, folder_structure):
+        manifest = ManifestFile(hash_method="sha256")
+        dir_path, file_path = folder_structure
+        assert "files" not in manifest.database
+        manifest.add_artifact_to_db(file_path, dir_path)
+        assert "files" in manifest.database
+
 
 class TestMetaData:
     def test_add_meta_data(self):
@@ -61,12 +69,12 @@ class TestMetaData:
         keyword = "test_keyword"
         content = "test_content"
         manifest.add_meta_data(keyword=keyword, content=content)
-        assert manifest._meta[keyword] == content
+        assert manifest.database[keyword] == content
 
     def test_add_meta_data_file(self, meta_file):
         manifest = ManifestFile(hash_method="sha256")
         manifest.add_meta_data_file(meta_data_path=meta_file)
-        assert manifest._meta["first"] == 1
-        assert manifest._meta["second"] == 2
-        assert manifest._meta["third"] == 3
-        assert manifest._meta["fourth"] == 4
+        assert manifest.database["first"] == 1
+        assert manifest.database["second"] == 2
+        assert manifest.database["third"] == 3
+        assert manifest.database["fourth"] == 4
