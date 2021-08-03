@@ -48,3 +48,7 @@ Example structure
         ├── SPL.bin
         └── imgage.bin
 ```
+
+## Running the script
+install using `pip install .`   
+test running it using `package -D examples/example_delivery/ -M examples/meta-data.json -o examples/output/ `
