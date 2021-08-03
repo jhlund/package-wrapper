@@ -1,5 +1,6 @@
 from datetime import datetime
 from pathlib import Path
+import json
 
 from delivery.manifest.artifactdb import ArtifactE, ArtifactDB
 from delivery.manifest.filehash import file_hash_create_hash_file
@@ -27,6 +28,11 @@ class ManifestFile:
 
     def add_meta_data(self, keyword: str, content):
         self._meta[keyword] = content
+
+    def add_meta_data_file(self, meta_data_path: Path):
+        data = json.loads(meta_data_path.read_bytes())
+        for key, value in data.items():
+            self.add_meta_data(keyword=key, content=value)
 
     def add_folder(self, path_to_directory: Path):
         """
