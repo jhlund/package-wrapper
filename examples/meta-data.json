@@ -1,4 +1,9 @@
-{
+{   
+    "Built by": "name name",
+    "email": "email(at)example.com",
+    "mgate OS version": "1.2.3",
+    "mgate OS git commit": "1234567890",
+    "yocto git commit": "1234567890", 
     "placeholder str": "this is an example meta-data file without contents.",
     "placeholder int": 123,
     "placeholder list": ["list", "of", "strings"],

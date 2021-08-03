@@ -38,14 +38,13 @@ from delivery.manifest.filehash import HASH_ALGORITHMS
     "--output",
     "-o",
     type=click.Path(
-        exists=False,
-        dir_okay=True,
         resolve_path=True,
         path_type=Path,
     ),
-    help="path to output folder")
+    help="path to wanted output file (example.tar.gz).\nAlways overwrites files if exists")
 @click.option(
     "--hash-type",
+    "-#",
     type=click.Choice(HASH_ALGORITHMS, case_sensitive=False),
     default="sha256",
     help="hash algorithm to use",
@@ -71,9 +70,12 @@ def package(directory, meta_data, output, hash_type):
     with open(output_manifest_path, "w") as file_pointer:
         file_pointer.write(json.dumps(manifest.retrive_contents(), indent=3))
     
-    # Create the compressed output file
-    archive = Archive(output.joinpath("output.zip"))
-    archive.compress(dir_path=directory)
+    if output.parent.exists():
+        # Create the compressed output file
+        archive = Archive(output)
+        archive.compress(dir_path=directory)
+    else:
+        print("oops!")
 
 
 if __name__ == "__main__":
