@@ -62,8 +62,8 @@ def package(directory, meta_data, output, hash_type):
 
     manifest.add_meta_data("version of package program", __version__)
     manifest.add_meta_data("Input directory", str(directory))
-    manifest.add_meta_data("Hash method used", hash_type)
     manifest.add_meta_data("Output folder", str(output))
+    manifest.add_meta_data_file(meta_data_path=meta_data)
 
     manifest.add_folder(path_to_directory=directory)
     output_manifest_path = directory.joinpath(Path("manifest.json"))
