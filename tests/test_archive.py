@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import List
 
 import pytest
-from delivery.archiver.archiver import Archive, ArchiveE
+from package_wrapper.archiver.archiver import Archive, ArchiveE
 
 
 @pytest.fixture()

@@ -1,12 +1,11 @@
 {
-   "created": "2021-08-04 15:47:29 (utc)",
+   "created": "2021-08-04 16:13:31 (utc)",
    "version of package-wrapper": "0.0.1",
-   "archive type used for packaging": "tar.gz",
+   "archive type used for packaging": "zip",
    "built by": "first_name last_name",
    "email": "email(at)example.com",
-   "mgate OS version": "1.2.3",
-   "mgate OS git commit": "1234567890",
-   "yocto git commit": "1234567890",
+   "build version": "1.2.3",
+   "git commit": "1234567890",
    "placeholder str": "this is an example meta-data file without contents.",
    "placeholder int": 123,
    "placeholder list": [
@@ -20,7 +19,7 @@
       "misc": "3"
    },
    "files": {
-      "manifest.json": "sha256:db4b56b6fa846465e503b98f8c8c4fb0dc39df1ed7064a8d58c69f16690edd8e",
+      "manifest.json": "sha256:644b8a79a1eec5eae56fc4435b0e3636dc2d4a0733211665a31fd894eca637b9",
       "misc/happy_ascii_art.txt": "sha256:4dde1e83eeafa5979f913c3dbb939867cfcf816e43335710703d31aa7e74f99e",
       "docs/generated_docs/doc3.txt": "sha256:619b0adc73906e85c80904b27536bfe3066c7e309b5918e5ff6d3e7cfa607e41",
       "docs/generated_docs/doc1.txt": "sha256:619b0adc73906e85c80904b27536bfe3066c7e309b5918e5ff6d3e7cfa607e41",

@@ -3,7 +3,7 @@ import re
 from pathlib import Path
 
 import pytest
-from delivery.manifest.manifest import ManifestE, ManifestFile
+from package_wrapper.manifest.manifest import ManifestE, ManifestFile
 
 TIME_FORMAT = re.compile(
     r"[0-3][0-9]\/[0-1][0-9]\/[0-9][0-9][0-9][0-9] [0-2][0-9]:[0-6][0-9]:[0-6][0-9]"

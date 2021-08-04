@@ -4,9 +4,9 @@ import json
 from datetime import datetime
 
 from .version import __version__
-from delivery.archiver.archiver import Archive
-from delivery.manifest.manifest import ManifestFile
-from delivery.manifest.filehash import HASH_ALGORITHMS
+from package_wrapper.archiver.archiver import Archive
+from package_wrapper.manifest.manifest import ManifestFile
+from package_wrapper.manifest.filehash import HASH_ALGORITHMS
 
 
 def get_compression_method_from_file_name(filename):

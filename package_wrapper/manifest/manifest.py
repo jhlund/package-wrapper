@@ -1,8 +1,8 @@
 from pathlib import Path
 import json
 
-from delivery.manifest.filehash import file_hash_create, file_hash_check, FileHashE
-from delivery.manifest.filehash import file_hash_create_hash_file
+from package_wrapper.manifest.filehash import file_hash_create, file_hash_check, FileHashE
+from package_wrapper.manifest.filehash import file_hash_create_hash_file
 
 
 class ManifestE(BaseException):
