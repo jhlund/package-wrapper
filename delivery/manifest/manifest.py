@@ -1,4 +1,3 @@
-from datetime import datetime
 from pathlib import Path
 import json
 
@@ -22,9 +21,7 @@ class ManifestFile:
     """
 
     def __init__(self, hash_method="sha256"):
-        #self.contents = ArtifactDB(hash_method=hash_method)
         self.database = dict()
-        self.database["created (utc)"] = datetime.utcnow().strftime("%d/%m/%Y %H:%M:%S")
         self.hash_method = hash_method
 
     def add_meta_data(self, keyword: str, content):

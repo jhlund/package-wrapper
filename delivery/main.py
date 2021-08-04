@@ -61,20 +61,32 @@ def get_compression_method_from_file_name(filename):
     default="sha256",
     help="hash algorithm to use",
 )
-def package(directory, meta_data, output, hash_type):
+@click.option(
+    "--archive-type",
+    "-a",
+    type=click.Choice(["tar", "tar.gz", "zip"], case_sensitive=False),
+    help="compression algorithm to use. This overrides the -o/--output suffix",
+)
+def package(directory, meta_data, output, hash_type, archive_type):
     """
     Given a directory path and meta-information, package this into a delivery.
     """
-    print(f"directory: {directory}")
-    print(f"meta_data: {meta_data}")
-    print(f"hash_type: {hash_type}")
+    if not archive_type and not output:
+        archive_type = "tar.gz"
+
+    if not archive_type and output:
+        archive_type = get_compression_method_from_file_name(output)
+
+    if not output:
+        output = directory.parent.joinpath(Path(f"output.{archive_type}"))
+
     # Create the complete meta-data file
     manifest = ManifestFile(hash_method=hash_type)
-
-    manifest.add_meta_data("version of package program", __version__)
-    manifest.add_meta_data("Input directory", str(directory))
-    manifest.add_meta_data("Output folder", str(output))
-    manifest.add_meta_data_file(meta_data_path=meta_data)
+    manifest.add_meta_data("created", datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S (utc)"))
+    manifest.add_meta_data("version of package-wrapper", __version__)
+    manifest.add_meta_data("archive type used for packaging", archive_type)
+    if meta_data:
+        manifest.add_meta_data_file(meta_data_path=meta_data)
 
     # All folder to the manifest
     manifest.add_folder(path_to_directory=directory)
