@@ -1,7 +1,8 @@
 import json
 import re
-import pytest
 from pathlib import Path
+
+import pytest
 from delivery.manifest.manifest import ManifestE, ManifestFile
 
 TIME_FORMAT = re.compile(
