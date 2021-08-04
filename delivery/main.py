@@ -8,6 +8,7 @@ from delivery.archiver.archiver import Archive
 from delivery.manifest.manifest import ManifestFile
 from delivery.manifest.filehash import HASH_ALGORITHMS
 
+
 def get_compression_method_from_file_name(filename):
     if str(filename).endswith(".tar.gz"):
         compression_method = "tar.gz"
@@ -16,7 +17,9 @@ def get_compression_method_from_file_name(filename):
     elif str(filename).endswith(".zip"):
         compression_method = "zip"
     else:
-        raise click.ClickException("Could not determine compression method. Please specify parameter -a / --archive-type")
+        raise click.ClickException(
+            "Could not determine compression method. Please specify parameter -a / --archive-type"
+        )
     return compression_method
 
 
@@ -44,8 +47,9 @@ def get_compression_method_from_file_name(filename):
         resolve_path=True,
         path_type=Path,
     ),
-    required=False, 
-    help="path to meta-data file")
+    required=False,
+    help="path to meta-data file",
+)
 @click.option(
     "--output",
     "-o",
@@ -53,7 +57,8 @@ def get_compression_method_from_file_name(filename):
         resolve_path=False,
         path_type=Path,
     ),
-    help="path to wanted output file (example.tar.gz).\n Always overwrites files if exists")
+    help="path to wanted output file (example.tar.gz).\n Always overwrites files if exists",
+)
 @click.option(
     "--hash-type",
     "-#",
@@ -65,11 +70,13 @@ def get_compression_method_from_file_name(filename):
     "--archive-type",
     "-a",
     type=click.Choice(["tar", "tar.gz", "zip"], case_sensitive=False),
-    help="compression algorithm to use. This overrides the -o/--output suffix",
+    help="compression algorithm to use. This overrides the -o /--output file name suffix",
 )
 def package(directory, meta_data, output, hash_type, archive_type):
     """
-    Given a directory path and meta-information, package this into a delivery.
+    Given a directory path and optional meta-information in a JSON formatted file.
+    Creates a deliverable archive file containing both the files and a manifest
+    with meta-data as well as file hashes for each file.
     """
     if not archive_type and not output:
         archive_type = "tar.gz"
@@ -82,7 +89,9 @@ def package(directory, meta_data, output, hash_type, archive_type):
 
     # Create the complete meta-data file
     manifest = ManifestFile(hash_method=hash_type)
-    manifest.add_meta_data("created", datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S (utc)"))
+    manifest.add_meta_data(
+        "created", datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S (utc)")
+    )
     manifest.add_meta_data("version of package-wrapper", __version__)
     manifest.add_meta_data("archive type used for packaging", archive_type)
     if meta_data:
@@ -93,7 +102,7 @@ def package(directory, meta_data, output, hash_type, archive_type):
     output_manifest_path = directory.joinpath(Path("manifest.json"))
     with open(output_manifest_path, "w") as file_pointer:
         file_pointer.write(json.dumps(manifest.retrive_contents(), indent=3))
-    
+
     if output.parent.exists():
         # Create the compressed output file
         archive = Archive(output, archive_type=archive_type)

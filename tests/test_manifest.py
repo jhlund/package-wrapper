@@ -20,15 +20,17 @@ def folder_structure(tmpdir):
         json.dump(_json_data, fp, indent=3)
     yield base_path, _path
 
+
 @pytest.fixture()
 def meta_file(tmpdir):
     base_path = Path(tmpdir)
     _file_name = Path("meta_data.json")
-    _json_data = {"first": 1,
-                  "second": 2,
-                  "third": 3,
-                  "fourth": 4,
-                  }
+    _json_data = {
+        "first": 1,
+        "second": 2,
+        "third": 3,
+        "fourth": 4,
+    }
     _path = base_path.joinpath(_file_name)
     with open(_path, "w") as fp:
         json.dump(_json_data, fp, indent=3)

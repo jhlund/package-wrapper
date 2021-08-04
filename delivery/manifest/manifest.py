@@ -57,7 +57,7 @@ class ManifestFile:
 
     def add_artifact_to_db(self, path_to_file: Path, base_path: Path):
         if "files" not in self.database.keys():
-            self.database["files"] = dict()   
+            self.database["files"] = dict()
 
         _hash = None
         if path_to_file in self.database.keys():
