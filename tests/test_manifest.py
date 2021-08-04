@@ -39,9 +39,10 @@ def meta_file(tmpdir):
 
 
 class TestManifest:
-    def test_created_time_format(self):
-        manifest = ManifestFile(hash_method="sha256")
-        assert re.match(TIME_FORMAT, manifest.database["created (utc)"])
+    # Time created data is no longer created when initing the Manifest class 
+    # def test_created_time_format(self):
+    #    manifest = ManifestFile(hash_method="sha256")
+    #    assert re.match(TIME_FORMAT, manifest.database["package-wrapper"]["package created"])
 
     def test_add_folder(self, folder_structure):
         manifest = ManifestFile(hash_method="sha256")
