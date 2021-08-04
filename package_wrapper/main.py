@@ -89,11 +89,12 @@ def package(directory, meta_data, output, hash_type, archive_type):
 
     # Create the complete meta-data file
     manifest = ManifestFile(hash_method=hash_type)
-    manifest.add_meta_data(
-        "created", datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S (utc)")
-    )
-    manifest.add_meta_data("version of package-wrapper", __version__)
-    manifest.add_meta_data("archive type used for packaging", archive_type)
+    package_metadata = {
+    "package created": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S (utc)"),
+    "version of package-wrapper": __version__,
+    "archive type used for packaging": archive_type
+    }
+    manifest.add_meta_data(keyword="package-wrapper", content=package_metadata)
     if meta_data:
         manifest.add_meta_data_file(meta_data_path=meta_data)
 
