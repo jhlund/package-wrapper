@@ -36,7 +36,7 @@ def get_compression_method_from_file_name(filename):
 )
 @click.option(
     "--meta-data",
-    "-M",
+    "-m",
     type=click.Path(
         exists=True,
         file_okay=True,
@@ -44,16 +44,16 @@ def get_compression_method_from_file_name(filename):
         resolve_path=True,
         path_type=Path,
     ),
-    required=True, 
+    required=False, 
     help="path to meta-data file")
 @click.option(
     "--output",
     "-o",
     type=click.Path(
-        resolve_path=True,
+        resolve_path=False,
         path_type=Path,
     ),
-    help="path to wanted output file (example.tar.gz).\nAlways overwrites files if exists")
+    help="path to wanted output file (example.tar.gz).\n Always overwrites files if exists")
 @click.option(
     "--hash-type",
     "-#",
