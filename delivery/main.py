@@ -1,11 +1,23 @@
 import click
 from pathlib import Path
 import json
+from datetime import datetime
 
 from .version import __version__
 from delivery.archiver.archiver import Archive
 from delivery.manifest.manifest import ManifestFile
 from delivery.manifest.filehash import HASH_ALGORITHMS
+
+def get_compression_method_from_file_name(filename):
+    if str(filename).endswith(".tar.gz"):
+        compression_method = "tar.gz"
+    elif str(filename).endswith(".tar"):
+        compression_method = "tar"
+    elif str(filename).endswith(".zip"):
+        compression_method = "zip"
+    else:
+        raise click.ClickException("Could not determine compression method. Please specify parameter -a / --archive-type")
+    return compression_method
 
 
 @click.command()
@@ -72,10 +84,10 @@ def package(directory, meta_data, output, hash_type):
     
     if output.parent.exists():
         # Create the compressed output file
-        archive = Archive(output)
+        archive = Archive(output, archive_type=archive_type)
         archive.compress(dir_path=directory)
     else:
-        print("oops!")
+        raise click.ClickException("The specified output folder does not exist")
 
 
 if __name__ == "__main__":

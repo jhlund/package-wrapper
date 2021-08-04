@@ -27,16 +27,16 @@ def generate_files(tmpdir):
 
 class Test_archive:
     @pytest.mark.parametrize(
-        "archive_path",
+        "archive_path, archive_type",
         [
-            pytest.param(Path("test.zip"), id="zip"),
-            pytest.param(Path("test.tar"), id="tar"),
-            pytest.param(Path("test.tar.gz"), id="tar.gz"),
+            pytest.param(Path("test.zip"), "zip", id="zip"),
+            pytest.param(Path("test.tar"), "tar", id="tar"),
+            pytest.param(Path("test.tar.gz"), "tar.gz", id="tar.gz"),
         ],
     )
-    def test_add_folder(self, generate_files, tmpdir, archive_path):
+    def test_add_folder(self, generate_files, tmpdir, archive_path, archive_type):
         archive_path = Path(tmpdir).joinpath(Path("test.zip"))
-        archive = Archive(file_name=archive_path)
+        archive = Archive(file_name=archive_path, archive_type=archive_type)
         dir_path = generate_files
         archive.compress(dir_path=dir_path)
         assert archive_path.exists()
@@ -44,6 +44,6 @@ class Test_archive:
     def test_add_folder_raises_no_dir(self, generate_files, tmpdir):
         archive_path = Path(tmpdir).joinpath(Path("example.zip"))
         faulty_dir_path = Path(tmpdir).joinpath(Path("not_an_existing_directory"))
-        archive = Archive(file_name=archive_path)
+        archive = Archive(file_name=archive_path, archive_type="zip")
         with pytest.raises(ArchiveE):
             archive.compress(dir_path=faulty_dir_path)

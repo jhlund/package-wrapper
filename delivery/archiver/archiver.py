@@ -10,8 +10,9 @@ class ArchiveE(Exception):
 
 
 class Archive:
-    def __init__(self, file_name: Path):
+    def __init__(self, file_name: Path, archive_type: str):
         self.archive = file_name
+        self.archive_type = archive_type
 
     @staticmethod
     def _validate(file_path: Path):
@@ -27,13 +28,13 @@ class Archive:
     def extract(self, out_dir: Path):
         Archive._validate(self.archive)
 
-        if self.archive.name.endswith("tar.gz"):
+        if self.archive_type == "tar.gz":
             with tarfile.open(self.archive, "r:gz") as tar_ref:
                 tar_ref.extractall(out_dir)
-        elif self.archive.name.endswith("tar"):
+        elif self.archive_type == "tar":
             with tarfile.open(self.archive, "r:") as tar_ref:
                 tar_ref.extractall(out_dir)
-        elif self.archive.name.endswith("zip"):
+        elif self.archive_type == "zip":
             with zipfile.ZipFile(self.archive, "r") as zip_ref:
                 zip_ref.extractall(out_dir)
         else:
@@ -50,19 +51,19 @@ class Archive:
         ]
 
         # handles TAR, TGZ and ZIP
-        if self.archive.name.endswith("tar.gz"):
+        if self.archive_type == "tar.gz":
             with tarfile.open(self.archive, "w:gz") as tar_ref:
                 for file in files:
                     _abs_path = file.absolute()
                     _rel_path = _abs_path.relative_to(dir_path)
                     tar_ref.add(_abs_path, arcname=_rel_path, recursive=True)
-        elif self.archive.name.endswith("tar"):
+        elif self.archive_type == "tar":
             with tarfile.open(self.archive, "w") as tar_ref:
                 for file in files:
                     _abs_path = file.absolute()
                     _rel_path = _abs_path.relative_to(dir_path)
                     tar_ref.add(_abs_path, arcname=_rel_path, recursive=True)
-        elif self.archive.name.endswith("zip"):
+        elif self.archive_type == "zip":
             with zipfile.ZipFile(
                 self.archive, mode="w", compression=zipfile.ZIP_DEFLATED
             ) as zip_ref:
