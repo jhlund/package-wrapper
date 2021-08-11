@@ -1,7 +1,11 @@
 from pathlib import Path
 import json
 
-from package_wrapper.manifest.filehash import file_hash_create, file_hash_check, FileHashE
+from package_wrapper.manifest.filehash import (
+    file_hash_create,
+    file_hash_check,
+    FileHashE,
+)
 from package_wrapper.manifest.filehash import file_hash_create_hash_file
 
 

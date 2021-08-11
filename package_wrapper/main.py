@@ -80,11 +80,14 @@ def package(directory, meta_data, output, hash_type, archive_type):
     """
     package_api(directory, meta_data, output, hash_type, archive_type)
 
+
 def package_api(directory, meta_data, output, hash_type, archive_type):
     """
     Given a directory path and optional meta-information in a JSON formatted file.
     Creates a deliverable archive file containing both the files and a manifest
     with meta-data as well as file hashes for each file.
+
+    Internal call
     """
     if not archive_type and not output:
         archive_type = "tar.gz"
@@ -98,9 +101,9 @@ def package_api(directory, meta_data, output, hash_type, archive_type):
     # Create the complete meta-data file
     manifest = ManifestFile(hash_method=hash_type)
     package_metadata = {
-    "package created": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S (utc)"),
-    "version of package-wrapper": __version__,
-    "archive type used for packaging": archive_type
+        "package created": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S (utc)"),
+        "version of package-wrapper": __version__,
+        "archive type used for packaging": archive_type,
     }
     manifest.add_meta_data(keyword="package-wrapper", content=package_metadata)
     if meta_data:

@@ -2,7 +2,10 @@ import json
 from pathlib import Path
 
 import pytest
-from package_wrapper.manifest.filehash import file_hash_check, file_hash_create_hash_file
+from package_wrapper.manifest.filehash import (
+    file_hash_check,
+    file_hash_create_hash_file,
+)
 
 
 @pytest.fixture()
