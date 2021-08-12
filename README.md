@@ -159,3 +159,10 @@ Options:
                                   the -o /--output file name suffix
   --help                          Show this message and exit.
 ```
+
+# API usage
+To use the package-wrapper as an internal python module import it from the file.
+```
+from package_wrapper.package import package
+```
+Then call `package()`
