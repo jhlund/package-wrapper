@@ -2,6 +2,7 @@ import json
 import os
 from pathlib import Path
 from typing import List
+import filecmp
 
 import pytest
 from package_wrapper.archiver.archiver import Archive, ArchiveE
@@ -47,3 +48,30 @@ class Test_archive:
         archive = Archive(file_name=archive_path, archive_type="zip")
         with pytest.raises(ArchiveE):
             archive.compress(dir_path=faulty_dir_path)
+
+    @pytest.mark.parametrize(
+        "archive_path, archive_type",
+        [
+            pytest.param(Path("test.zip"), "zip", id="zip"),
+            pytest.param(Path("test.tar"), "tar", id="tar"),
+            pytest.param(Path("test.tar.gz"), "tar.gz", id="tar.gz"),
+        ],
+    )
+    def test_extract_archive(self, generate_files, tmpdir, archive_path, archive_type):
+        archive_path_full = Path(tmpdir) / archive_path
+        output_path = Path(tmpdir) / Path(archive_type)
+        archive = Archive(file_name=archive_path_full, archive_type=archive_type)
+        dir_path = generate_files
+        archive.compress(dir_path=dir_path)
+        archive.extract(out_dir=output_path)
+        file_list = [
+            "first/test11",
+            "first/test12",
+            "second/test21",
+            "second/test22",
+            "first/first_lvl2/test111",
+        ]
+        _match, _mismatch, _error = filecmp.cmpfiles(output_path, dir_path, file_list)
+        assert len(_mismatch) == 0
+        assert len(_error) == 0
+        assert len(_match) == len(file_list)
