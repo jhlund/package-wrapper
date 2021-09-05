@@ -35,11 +35,11 @@ class Test_archive:
         ],
     )
     def test_add_folder(self, generate_files, tmpdir, archive_path, archive_type):
-        archive_path = Path(tmpdir).joinpath(Path("test.zip"))
-        archive = Archive(file_name=archive_path, archive_type=archive_type)
+        archive_path_full = Path(tmpdir) / archive_path
+        archive = Archive(file_name=archive_path_full, archive_type=archive_type)
         dir_path = generate_files
         archive.compress(dir_path=dir_path)
-        assert archive_path.exists()
+        assert archive_path_full.exists()
 
     def test_add_folder_raises_no_dir(self, generate_files, tmpdir):
         archive_path = Path(tmpdir).joinpath(Path("example.zip"))
